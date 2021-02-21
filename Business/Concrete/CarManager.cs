@@ -4,6 +4,9 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using Business.Abstract;
+using Business.Constants;
+using Core.Utilities;
+using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using Entities.DTOs;
@@ -19,71 +22,70 @@ namespace Business.Concrete
             _carDal = carDal;
         }
 
-        public void Add(Car car)
+        public IResult Add(Car car)
         {
-            _carDal.Add(car);
+            if (car.Name.Length>2 && car.DailyPrice>0)
+            {
+                _carDal.Add(car);
+                return new SuccessResult(Messages.CarAdded);
+            }
+            return new ErrorResult(Messages.CarPriceInvalid);
         }
 
-        public void Delete(Car car)
+        public IResult Delete(Car car)
         {
             _carDal.Delete(car);
+            return new SuccessResult(Messages.CarDeleted);
+
         }
 
-        public List<Car> GetAll()
+        public IDataResult<List<Car>> GetAll()
         {
-            
-            return _carDal.GetAll();
-        }
-
-        public List<Car> GetAllByDailyPrice(decimal max, decimal min)
-        {
-            return _carDal.GetAll(c => c.DailyPrice >=min && c.DailyPrice <=max);
-        }
-
-        public List<Car> GetAllById(int id)
-        {
-            return _carDal.GetAll(c => c.Id == id);
-        }
-
-        public List<Car> GetAllByModelYear(int year)
-        {
-            return _carDal.GetAll(c => c.ModelYear==year);
-        }
-
-        public List<CarDetailDto> GetCarDetails()
-        {
-            return _carDal.GetCarDetails();
-        }
-
-        public List<Car> GetCarsByBrandId(int brandId)
-        {
-            return _carDal.GetAll(c => c.BrandId == brandId);
-        }
-
-        public List<Car> GetCarsByColorId(int colorId)
-        {
-            return _carDal.GetAll(c => c.ColorId == colorId);
-        }
-
-        public void Update(Car car)
-        {
-            try
+            if (DateTime.Now.Hour == 23)
             {
-                if (car.Description.Length >= 2 && car.DailyPrice > 0)
-                {
-                    _carDal.Update(car);
-                    Console.WriteLine("Araba başarıyla güncellendi!");
-                }
-                else
-                {
-                    throw new Exception("Güncellemek istedğiniz değerin günlük ücreti 0'dan büyük olmalıdır!");
-                }
+                return new ErrorDataResult<List<Car>>(Messages.MaintenanceTime);
             }
-            catch(Exception exception)
+            return new SuccessDataResult<List<Car>>(_carDal.GetAll(),Messages.CarsListed);
+        }
+
+        public IDataResult<List<Car>> GetAllByDailyPrice(decimal max, decimal min)
+        {
+            return new SuccessDataResult<List<Car>>(_carDal.GetAll(c => c.DailyPrice >=min && c.DailyPrice <=max));
+        }
+
+        public IDataResult<List<Car>> GetAllById(int id)
+        {
+            return new SuccessDataResult<List<Car>>(_carDal.GetAll(c => c.Id == id));
+        }
+
+        public IDataResult<List<Car>> GetAllByModelYear(int year)
+        {
+            return new SuccessDataResult<List<Car>>(_carDal.GetAll(c => c.ModelYear==year));
+        }
+
+        public IDataResult<List<CarDetailDto>> GetCarDetails()
+        {
+            return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetails());
+        }
+
+        public IDataResult<List<Car>> GetCarsByBrandId(int brandId)
+        {
+            return new SuccessDataResult<List<Car>>(_carDal.GetAll(c => c.BrandId == brandId));
+        }
+
+        public IDataResult<List<Car>> GetCarsByColorId(int colorId)
+        {
+            return new SuccessDataResult<List<Car>>(_carDal.GetAll(c => c.ColorId == colorId));
+        }
+
+        public IResult Update(Car car)
+        { 
+            if (car.Name.Length >= 2 && car.DailyPrice > 0)
             {
-                Console.WriteLine(exception);
+                _carDal.Update(car);
+                return new SuccessResult(Messages.CarUpdated);
             }
-            
+            return new ErrorResult(Messages.CarNameInvalid);
         }
     }
 }
