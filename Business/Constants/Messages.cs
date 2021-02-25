@@ -25,6 +25,10 @@ namespace Business.Constants
         public static string ColorUpdated = "Renk güncellendi!";
         public static string ColorsListed = "Renkler listelendi";
 
+        public static string UserNameInvalid = "Kullanıcı ismi geçersiz! Kullanıcı ismi en az 2 karakter olmalıdır.";
+        public static string UserDeleted = "Kullanıcı silindi!";
+        public static string UserUpdated = "Kullanıcı güncellendi!";
+
         public static string RentalAdded = "Kiralama oluşturuldu";
         public static string RentalInvalid = "Araba teslim edilmediği için kiralanamaz";
 
