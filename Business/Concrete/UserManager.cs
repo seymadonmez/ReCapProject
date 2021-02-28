@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Text;
 using Business.Abstract;
 using Business.Constants;
+using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Validation;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
@@ -17,14 +19,11 @@ namespace Business.Concrete
         {
             _userDal = userdal;
         }
+        [ValidationAspect(typeof(UserValidator))]
         public IResult Add(User user)
         {
-            if (user.FirstName.Length > 2)
-            {
-                _userDal.Add(user);
-                return new SuccessResult(Messages.UserNameInvalid);
-            }
-            return new ErrorResult();
+            _userDal.Add(user);
+            return new SuccessResult(Messages.UserNameInvalid);
         }
 
         public IResult Delete(User user)
@@ -42,7 +41,7 @@ namespace Business.Concrete
         {
             return new SuccessDataResult<User>(_userDal.Get(u=>u.UserId==userId));
         }
-
+        [ValidationAspect(typeof(UserValidator))]
         public IResult Update(User user)
         {
             _userDal.Update(user);
