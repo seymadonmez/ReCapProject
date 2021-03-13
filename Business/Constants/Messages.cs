@@ -31,7 +31,14 @@ namespace Business.Constants
 
         public static string RentalAdded = "Kiralama oluşturuldu";
         public static string RentalInvalid = "Araba teslim edilmediği için kiralanamaz";
+        public static string InvalidBrandId = "Marka bulanamadı";
+        public static string InvalidColorId = "Renk bulanamadı";
+
 
         public static string MaintenanceTime = "Sistem bakımda";
+        public static string ColorNameAlreadyExists="Bu isimde renk zaten mevcut";
+        public static string BrandNameAlreadyExists = "Bu isimde renk zaten mevcut";
+
+        public static string CarImageLimitExceded = "Araba resmi limiti aşıldığı için yeni resim eklenemiyor";
     }
 }

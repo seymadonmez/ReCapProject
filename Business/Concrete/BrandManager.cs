@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Business.Abstract;
 using Business.Constants;
 using Business.ValidationRules.FluentValidation;
 using Core.Aspects.Autofac.Validation;
+using Core.Utilities.Business;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
@@ -22,6 +24,11 @@ namespace Business.Concrete
         [ValidationAspect(typeof(BrandValidator))]
         public IResult Add(Brand brand)
         {
+            IResult result = BusinessRules.Run(CheckIfBrandNameExits(brand.BrandName));
+            if (result != null)
+            {
+                return result;
+            }
             _brandDal.Add(brand);
             return new SuccessResult(Messages.BrandAdded);
         }
@@ -46,6 +53,16 @@ namespace Business.Concrete
         {
             _brandDal.Update(brand);
             return new SuccessResult(Messages.BrandUpdated);
+        }
+        private IResult CheckIfBrandNameExits(string productName)
+        {
+
+            var result = _brandDal.GetAll(p => p.BrandName == productName).Any(); //any bu kurala uyan kayıt var mı demek
+            if (result)
+            {
+                return new ErrorResult(Messages.BrandNameAlreadyExists);
+            }
+            return new SuccessResult();
         }
     }
 }

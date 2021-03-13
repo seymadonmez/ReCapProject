@@ -43,7 +43,7 @@ namespace ConsoleUI
         private static void CarDtoTest()
         {
             Console.WriteLine("ID\tBrandId\tGünlük Kirası\tAçıklama\n");
-            CarManager carManager = new CarManager(new EfCarDal());
+            CarManager carManager = new CarManager(new EfCarDal(),new BrandManager(new EfBrandDal()),new ColorManager(new EfColorDal()));
 
             foreach (var carDetail in carManager.GetCarDetails().Data)
             {
