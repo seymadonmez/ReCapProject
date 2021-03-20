@@ -4,6 +4,8 @@ using System.Text;
 using Business.Abstract;
 using Business.Constants;
 using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Caching;
+using Core.Aspects.Autofac.Transaction;
 using Core.Aspects.Autofac.Validation;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
@@ -20,7 +22,8 @@ namespace Business.Concrete
             _rentalDal = rentalDal;
         }
         [ValidationAspect(typeof(RentalValidator))]
-
+        [TransactionScopeAspect]
+        [CacheRemoveAspect("IRentalService.Get")]
         public IResult Add(Rental rental)
         {
             var results = _rentalDal.GetAll(r => r.CarId == rental.CarId && r.ReturnDate==null);
@@ -31,18 +34,18 @@ namespace Business.Concrete
             _rentalDal.Add(rental);
             return new SuccessResult(Messages.RentalAdded);
         }
-
+        [CacheRemoveAspect("IRentalService.Get")]
         public IResult Delete(Rental rental)
         {
             _rentalDal.Delete(rental);
             return new SuccessResult();
         }
-
+        [CacheAspect]
         public IDataResult<List<Rental>> GetAll()
         {
             return  new SuccessDataResult<List<Rental>>(_rentalDal.GetAll());
         }
-
+        [CacheAspect]
         public IDataResult<Rental> GetByCarId(int carId)
         {
             return new SuccessDataResult<Rental>(_rentalDal.Get(r=>r.CarId==carId));
