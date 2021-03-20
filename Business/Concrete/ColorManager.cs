@@ -56,9 +56,9 @@ namespace Business.Concrete
         }
         private IResult CheckIfColorNameExits(string productName)
         {
-            
-            var result = _colorDal.GetAll(p => p.ColorName == productName).Any(); //any bu kurala uyan kayıt var mı demek
-            if (result)
+
+            var result = _colorDal.GetAll(p => p.ColorName == productName).Count; //any bu kurala uyan kayıt var mı demek
+            if (result>0)
             {
                 return new ErrorResult(Messages.ColorNameAlreadyExists);
             }

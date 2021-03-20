@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using Business.Abstract;
+using Business.BusinessAspects.Autofac;
 using Business.Constants;
 using Business.ValidationRules.FluentValidation;
 using Core.Aspects.Autofac.Validation;
@@ -33,6 +34,7 @@ namespace Business.Concrete
             _colorService = colorService;
         }
 
+        [SecuredOperation("car.add")]
         [ValidationAspect(typeof(CarValidator))]
         public IResult Add(Car car)
         {
@@ -43,8 +45,9 @@ namespace Business.Concrete
             }
             _carDal.Add(car);
             return new SuccessResult(Messages.CarAdded);
-        } 
+        }
 
+        [SecuredOperation("car.delete,admin")]
         public IResult Delete(Car car)
         {
             _carDal.Delete(car);
@@ -91,6 +94,7 @@ namespace Business.Concrete
             return new SuccessDataResult<List<Car>>(_carDal.GetAll(c => c.ColorId == colorId));
         }
 
+        [SecuredOperation("car.update,admin,editor")]
         public IResult Update(Car car)
         { 
             if (car.Name.Length >= 2 && car.DailyPrice > 0)

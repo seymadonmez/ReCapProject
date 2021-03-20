@@ -25,6 +25,7 @@ namespace Business.Constants
         public static string ColorUpdated = "Renk güncellendi!";
         public static string ColorsListed = "Renkler listelendi";
 
+        public static string UserAdded = "Kullanıcı eklendi";
         public static string UserNameInvalid = "Kullanıcı ismi geçersiz! Kullanıcı ismi en az 2 karakter olmalıdır.";
         public static string UserDeleted = "Kullanıcı silindi!";
         public static string UserUpdated = "Kullanıcı güncellendi!";
@@ -40,5 +41,14 @@ namespace Business.Constants
         public static string BrandNameAlreadyExists = "Bu isimde renk zaten mevcut";
 
         public static string CarImageLimitExceded = "Araba resmi limiti aşıldığı için yeni resim eklenemiyor";
+
+        public static string AuthorizationDenied = "Yetkiniz yok";
+        public static string UserNotFound = "Kullanıcı bulunamadı";
+        public static string PasswordError = "Şifre hatalı";
+        public static string SuccessfulLogin = "Sisteme giriş başarılı";
+        public static string UserAlreadyExists = "Bu kullanıcı zaten mevcut";
+        public static string UserRegistered = "Kullanıcı başarıyla kaydedildi";
+        public static string AccessTokenCreated = "Access token başarıyla oluşturuldu";
+        
     }
 }

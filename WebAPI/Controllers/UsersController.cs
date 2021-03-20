@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Business.Abstract;
+using Core.Entities.Concrete;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using Microsoft.AspNetCore.Http;
@@ -34,16 +35,16 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost("add")]
-        public IActionResult Add(User user)
-        {
-            var result = _userService.Add(user);
-            if (result.Success)
-            {
-                return Ok(result.Message);
-            }
+        //public IActionResult Add(User user)
+        //{
+        //    var result = _userService.Add(user);
+        //    if (result)
+        //    {
+        //        return Ok(result.Message);
+        //    }
 
-            return BadRequest(result.Message);
-        }
+        //    return BadRequest(result.Message);
+        //}
         [HttpPost("update")]
         public IActionResult Update(User user)
         {

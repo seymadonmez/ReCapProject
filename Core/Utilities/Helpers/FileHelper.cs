@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Text;
 using Core.Utilities.Results;
 using System.IO;
-using System.Text;
 using Microsoft.AspNetCore.Http;
 
 namespace Core.Utilities.Helpers
