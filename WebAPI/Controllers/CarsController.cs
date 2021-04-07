@@ -8,6 +8,7 @@ using DataAccess.Concrete.EntityFramework;
 using Entities.Concrete;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading;
 
 namespace WebAPI.Controllers
 {
@@ -25,15 +26,26 @@ namespace WebAPI.Controllers
         [HttpGet("getall")]
         public IActionResult GetAll()
         {
+            Thread.Sleep(5000);
             var result = _carService.GetAll();
             if (result.Success)
             {
-                return Ok(result.Data);
+                return Ok(result);
+            }
+            return BadRequest(result.Message);
+        }
+        [HttpGet("getcardetails")]
+        public IActionResult GetCarDetails()
+        {
+            var result = _carService.GetCarDetails();
+            if (result.Success)
+            {
+                return Ok(result);
             }
             return BadRequest(result.Message);
         }
 
-        [HttpGet("getbycarid")]
+        [HttpGet("getcarsbycarid")]
         public IActionResult GetByCarId(int carId)
         {
             var result = _carService.GetAllById(carId);
@@ -44,13 +56,24 @@ namespace WebAPI.Controllers
             return BadRequest(result);
         }
 
-        [HttpGet("getbybrandid")]
-        public IActionResult GetCarsByBrandId(int id)
+        [HttpGet("getcarsbybrandid")]
+        public IActionResult GetCarsByBrandId(int brandId)
         {
-            var result = _carService.GetCarsByBrandId(id);
+            var result = _carService.GetCarsByBrandId(brandId);
             if (result.Success)
             {
-                return Ok(result.Data);
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
+        [HttpGet("getcarsbycolorid")]
+        public IActionResult GetCarsByColorId(int colorId)
+        {
+            var result = _carService.GetCarsByColorId(colorId);
+            if (result.Success)
+            {
+                return Ok(result);
             }
             return BadRequest(result);
         }
