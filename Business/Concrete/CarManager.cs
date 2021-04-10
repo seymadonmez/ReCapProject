@@ -76,9 +76,9 @@ namespace Business.Concrete
             return new SuccessDataResult<List<Car>>(_carDal.GetAll(c => c.DailyPrice >=min && c.DailyPrice <=max));
         }
         [CacheAspect]
-        public IDataResult<List<Car>> GetAllById(int id)
+        public IDataResult<List<CarDetailDto>> GetAllById(int id)
         {
-            return new SuccessDataResult<List<Car>>(_carDal.GetAll(c => c.Id == id));
+            return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetails(c => c.CarId == id));
         }
 
         public IDataResult<List<Car>> GetAllByModelYear(int year)

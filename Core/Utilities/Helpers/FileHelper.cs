@@ -11,17 +11,20 @@ namespace Core.Utilities.Helpers
     {
         public static string Add(IFormFile file)
         {
-            var sourcepath = Path.GetTempFileName();
-            if (file.Length > 0)
+            var result = newPath(file);
+            try
             {
-                using (var uploading = new FileStream(sourcepath, FileMode.Create))
-                {
-                    file.CopyTo(uploading);
-                }
+                var sourcePath = Path.GetTempFileName();
+                if (file.Length > 0)
+                    using (var stream = new FileStream(sourcePath, FileMode.Create))
+                        file.CopyTo(stream);
+                File.Move(sourcePath, result.newPath);
             }
-            var result = CreationOfNewFilePath(file);
-            File.Move(sourcepath, result);
-            return result;
+            catch (Exception exception)
+            {
+                return exception.Message;
+            }
+            return result.Path2;
         }
         public static IResult Delete(string path)
         {
@@ -38,28 +41,37 @@ namespace Core.Utilities.Helpers
         }
         public static string Update(string sourcePath, IFormFile file)
         {
-            var result = CreationOfNewFilePath(file).ToString();
-            if (sourcePath.Length > 0)
+            var result = newPath(file);
+            try
             {
-                using (var stream = new FileStream(result, FileMode.Create))
+                if (sourcePath.Length > 0)
                 {
-                    file.CopyTo(stream);
+                    using (var stream = new FileStream(result.newPath, FileMode.Create))
+                    {
+                        file.CopyTo(stream);
+                    }
                 }
+                File.Delete(sourcePath);
             }
-            File.Delete(sourcePath);
-            return result;
+            catch (Exception exception)
+            {
+                return exception.Message;
+            }
+            return result.Path2;
         }
-        public static string CreationOfNewFilePath(IFormFile file)
+        public static (string newPath, string Path2) newPath(IFormFile file)
         {
-            FileInfo fileInfo = new FileInfo(file.FileName);
-            string fileExtension = fileInfo.Extension;
+            FileInfo ff = new FileInfo(file.FileName);
+            string fileExtension = ff.Extension;
+
+            var newPath = Guid.NewGuid() + fileExtension;
+
 
             string path = Environment.CurrentDirectory + @"\wwwroot\uploads";
-            var newPath = Guid.NewGuid().ToString() + "_" + DateTime.Now.Day + "_" + DateTime.Now.Month + "_" +
-                          DateTime.Now.Year + fileExtension;
 
             string result = $@"{path}\{newPath}";
-            return result;
+
+            return (result, $"\\uploads\\{newPath}");
         }
 
     }

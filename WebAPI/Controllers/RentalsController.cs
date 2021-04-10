@@ -31,16 +31,57 @@ namespace WebAPI.Controllers
 
             return BadRequest(result.Message);
         }
-        [HttpGet("getrentaldetails")]
-        public IActionResult GetRentalDetails()
+
+        [HttpGet("getrentaldetailsbycarid")]
+        public IActionResult GetRentalDetailsByCar(int carId)
         {
-            var result = _rentalService.GetRentalDetails();
+            var result = _rentalService.GetRentalDetailsByCar(carId);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+
+            return BadRequest(result.Message);
+        }
+        [HttpGet("getrentaldetailsbyuserid")]
+        public IActionResult GetRentalDetailsByUser(int userId)
+        {
+            var result = _rentalService.GetRentalDetailsByUser(userId);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+
+            return BadRequest(result.Message);
+        }
+
+        [HttpGet("getrentalbyid")]
+        public IActionResult GetRentalById(int rentalId)
+        {
+            var result = _rentalService.GetAllById(rentalId);
             if (result.Success)
             {
                 return Ok(result.Data);
             }
 
             return BadRequest(result.Message);
+        }
+        [HttpGet("getrentaldetails")]
+        public IActionResult GetRentalDetails()
+        {
+            var result = _rentalService.GetRentalDetails();
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+
+            return BadRequest(result.Message);
+        }
+        [HttpGet("checkcarisrented")]
+        public IActionResult CheckCarIsRented(int carId)
+        {
+            var result = _rentalService.CheckCarIsRented(carId);
+            return Ok(result);
         }
 
         [HttpPost("add")]
