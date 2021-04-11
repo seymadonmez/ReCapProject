@@ -7,8 +7,10 @@ using Business.ValidationRules.FluentValidation;
 using Core.Aspects.Autofac.Validation;
 using Core.Entities.Concrete;
 using Core.Utilities.Results;
+using Core.Utilities.Security.Hashing;
 using DataAccess.Abstract;
 using Entities.Concrete;
+using Entities.DTOs;
 
 namespace Business.Concrete
 {
@@ -58,6 +60,28 @@ namespace Business.Concrete
         {
             _userDal.Update(user);
             return new SuccessResult(Messages.UserUpdated);
+        }
+
+        public IResult EditProfile(UserDetailDto user)
+        {
+            byte[] passwordHash;
+            byte[] passwordSalt;
+
+            HashingHelper.CreatePasswordHash(user.Password, out passwordHash, out passwordSalt);
+
+            var userInfo = new User()
+            {
+                UserId = user.Id,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                PasswordHash = passwordHash,
+                PasswordSalt = passwordSalt,
+                Status = true
+            };
+
+            _userDal.Update(userInfo);
+            return new SuccessResult();
         }
     }
 }

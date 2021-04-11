@@ -78,7 +78,7 @@ namespace Business.Concrete
         private IResult CheckCarIsAvailable(Rental rental)
         {
             var result = _rentalDal.Get(r => (r.CarId == rental.CarId && r.ReturnDate == null)
-                                             || (r.RentDate >= rental.RentDate && r.ReturnDate >= rental.RentDate));
+                                             || (r.CarId == rental.CarId &&  r.RentDate >= rental.RentDate && r.ReturnDate >= rental.RentDate));
 
             if (result != null)
             {
