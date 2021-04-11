@@ -37,7 +37,7 @@ namespace Business.Concrete
             _colorService = colorService;
         }
 
-        //[SecuredOperation("car.add")]
+        [SecuredOperation("car.add")]
         [ValidationAspect(typeof(CarValidator))]
         [TransactionScopeAspect]
         [CacheRemoveAspect("ICarService.Get")]
